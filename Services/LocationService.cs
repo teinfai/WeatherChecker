@@ -2,18 +2,23 @@ using WeatherChecker.Dtos;
 using WeatherChecker.Models;
 using WeatherChecker.Repositories;
 using System.Net.Http.Json;
+using Microsoft.Extensions.Options;
 
 namespace WeatherChecker.Services
 {
     public class LocationService : ILocationService
     {
         private readonly ILocationRepository _repo;
+        private readonly IOptions<OpenWeatherMapModules> openWeatherMapModules;
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey = "YOUR_OPENWEATHERMAP_API_KEY";
 
-        public LocationService(ILocationRepository repo)
+        public LocationService(
+            ILocationRepository repo,
+            IOptions<OpenWeatherMapModules> openWeatherMapModules
+            )
         {
             _repo = repo;
+            this.openWeatherMapModules = openWeatherMapModules;
             _httpClient = new HttpClient();
         }
 
@@ -62,8 +67,11 @@ namespace WeatherChecker.Services
         {
             var location = await _repo.GetByIdAsync(id);
             if (location == null) return null;
+            var baseUrl = openWeatherMapModules.Value.URL;
+            var apiKey = openWeatherMapModules.Value.Key;
 
-            var url = $"https://api.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid={_apiKey}&units=metric";
+            // var url = $"https://api.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid={_apiKey}&units=metric";
+            var url = $"{baseUrl}/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid={apiKey}&units=metric";
 
             var response = await _httpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode) return null;
