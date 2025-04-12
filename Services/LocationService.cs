@@ -3,6 +3,8 @@ using WeatherChecker.Models;
 using WeatherChecker.Repositories;
 using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
+using System.Text.Json;
+
 
 namespace WeatherChecker.Services
 {
@@ -10,15 +12,18 @@ namespace WeatherChecker.Services
     {
         private readonly ILocationRepository _repo;
         private readonly IOptions<OpenWeatherMapModules> openWeatherMapModules;
+        private readonly IOptions<OpenCageDataMapModules> openCageDataMapModules;
         private readonly HttpClient _httpClient;
 
         public LocationService(
             ILocationRepository repo,
-            IOptions<OpenWeatherMapModules> openWeatherMapModules
+            IOptions<OpenWeatherMapModules> openWeatherMapModules,
+            IOptions<OpenCageDataMapModules> openCageDataMapModules
             )
         {
             _repo = repo;
             this.openWeatherMapModules = openWeatherMapModules;
+            this.openCageDataMapModules = openCageDataMapModules;
             _httpClient = new HttpClient();
         }
 
@@ -94,7 +99,10 @@ namespace WeatherChecker.Services
                 Id = location.Id,
                 Name = location.Name,
                 Latitude = location.Latitude,
-                Longitude = location.Longitude
+                Longitude = location.Longitude,
+                Address = location.Address,
+                City = location.City,
+                Country = location.Country,
             };
         }
 
@@ -114,5 +122,113 @@ namespace WeatherChecker.Services
                 public double humidity { get; set; }
             }
         }
+
+
+        public async Task<WeatherResultDto> GetWeatherByAddressAsync(SearchDto dto)
+        {
+            var openWeatherBaseUrl = openWeatherMapModules.Value.URL;
+            var openWeatherApiKey = openWeatherMapModules.Value.Key;
+
+            var openCageDataBaseUrl = openCageDataMapModules.Value.URL;
+            var openCageDataApiKey = openCageDataMapModules.Value.Key;
+
+            var fullAddress = $"{dto.Address}, {dto.City}, {dto.Country}";
+
+            // // var url = $"https://api.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid={_apiKey}&units=metric";
+            // var url = $"{openWeatherBaseUrl}/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid={apiKey}&units=metric";
+
+            // var address = "1600 Pennsylvania Ave NW, Washington, DC";  // Hardcoded address
+            // var url = $"{openCageDataBaseUrl}/geocode/v1/json?q={address}&key={openCageDataApiKey}";
+
+            var url = $"{openCageDataBaseUrl}/geocode/v1/json?q={fullAddress}&key={openCageDataApiKey}";
+
+            var response = await _httpClient.GetAsync(url);
+            if (!response.IsSuccessStatusCode) return null;
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                var openCageResponse = await response.Content.ReadFromJsonAsync<GeoResponse>();
+                if (openCageResponse != null)
+                {
+                    var geoInfo = openCageResponse.results[0].geometry;
+                    var ReturnLng = geoInfo.lng;
+                    var ReturnLat = geoInfo.lat;
+
+                    // Console.WriteLine($"Latitude: {ReturnLng}, Longitude: {ReturnLat}");
+
+                    var Weathrurl = $"{openWeatherBaseUrl}/data/2.5/weather?lat={ReturnLat}&lon={ReturnLng}&appid={openWeatherApiKey}&units=metric";
+
+                    var WeatherInfoResponse = await _httpClient.GetAsync(Weathrurl);
+
+                    if (WeatherInfoResponse.IsSuccessStatusCode)
+                    {
+
+                        var openWeatherResponse = await WeatherInfoResponse.Content.ReadFromJsonAsync<OpenWeatherResponse>();
+                        if (openWeatherResponse != null)
+                        {
+
+                            Console.WriteLine($"Response weather: {openWeatherResponse}");
+
+                            return new WeatherResultDto
+                            {
+                                Description = openWeatherResponse.weather.FirstOrDefault()?.description ?? "",
+                                Temperature = openWeatherResponse.main.temp,
+                                Humidity = openWeatherResponse.main.temp
+                            };
+
+                        }
+                        else
+                        {
+                            return null;
+                        }
+
+
+                    }
+
+
+
+                }
+                else
+                {
+                    return null;
+                }
+
+
+            }
+
+
+
+            // var location = geoResponse.results[0].geometry;
+
+            // // Step 2: Call OpenWeather API with Latitude and Longitude
+            // string weatherApiKey = "YOUR_OPENWEATHER_API_KEY";
+            // var weatherUrl = $"https://api.openweathermap.org/data/2.5/weather?lat={location.lat}&lon={location.lng}&appid={weatherApiKey}&units=metric";
+
+            // var rawWeather = await _httpClient.GetFromJsonAsync<dynamic>(weatherUrl);
+
+            // // Step 3: Return the combined result with both Location and Weather Data
+            // return new WeatherResultDto
+            // {
+            //     Location = new LocationDto
+            //     {
+            //         City = locationDto.City,
+            //         Country = locationDto.Country,
+            //         Address = locationDto.Address,
+            //         Latitude = location.lat,
+            //         Longitude = location.lng
+            //     },
+            //     Weather = new WeatherInfoDto
+            //     {
+            //         Description = rawWeather.weather[0].description,
+            //         Temperature = rawWeather.main.temp
+            //     }
+            // };
+
+            return null;
+
+        }
+
+
     }
 }

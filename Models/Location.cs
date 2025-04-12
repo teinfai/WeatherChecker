@@ -22,5 +22,9 @@ namespace WeatherChecker.Models
         public double Longitude { get; set; }              // Needed for OpenWeatherMap
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Custom Timezone
+
+        public string Address {get;set;}
+        public string City {get;set;}
+        public string Country {get;set;}
     }
 }

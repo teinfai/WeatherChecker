@@ -10,5 +10,7 @@ namespace WeatherChecker.Services
         Task<bool> UpdateLocationAsync(int id, UpdateLocationDto dto);
         Task<bool> DeleteLocationAsync(int id);
         Task<WeatherResultDto?> GetWeatherAsync(int id);
+
+        Task<WeatherResultDto> GetWeatherByAddressAsync(SearchDto dto);
     }
 }

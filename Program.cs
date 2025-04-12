@@ -11,6 +11,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.Configure<OpenWeatherMapModules>(
     builder.Configuration.GetSection("OpenWeatherMap"));
+builder.Services.Configure<OpenCageDataMapModules>(
+    builder.Configuration.GetSection("OpenCageDataMap"));
+
 
 #endregion
 
