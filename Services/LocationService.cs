@@ -106,22 +106,7 @@ namespace WeatherChecker.Services
             };
         }
 
-        private class OpenWeatherResponse
-        {
-            public List<Weather> weather { get; set; } = new();
-            public Main main { get; set; } = new();
 
-            public class Weather
-            {
-                public string description { get; set; } = string.Empty;
-            }
-
-            public class Main
-            {
-                public double temp { get; set; }
-                public double humidity { get; set; }
-            }
-        }
 
 
         public async Task<WeatherResultDto> GetWeatherByAddressAsync(SearchDto dto)
@@ -132,7 +117,10 @@ namespace WeatherChecker.Services
             var openCageDataBaseUrl = openCageDataMapModules.Value.URL;
             var openCageDataApiKey = openCageDataMapModules.Value.Key;
 
-            var fullAddress = $"{dto.Address}, {dto.City}, {dto.Country}";
+            var City = dto.City == "string" ? "" : dto.City;
+            var Country = dto.Country == "string" ? "" : dto.Country;
+
+            var fullAddress = $"{dto.Address}, {City}, {Country}";
 
             // // var url = $"https://api.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid={_apiKey}&units=metric";
             // var url = $"{openWeatherBaseUrl}/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&appid={apiKey}&units=metric";
@@ -149,7 +137,8 @@ namespace WeatherChecker.Services
             if (response.IsSuccessStatusCode)
             {
                 var openCageResponse = await response.Content.ReadFromJsonAsync<GeoResponse>();
-                if (openCageResponse != null)
+
+                if (openCageResponse != null && openCageResponse.results != null && openCageResponse.results.Any())
                 {
                     var geoInfo = openCageResponse.results[0].geometry;
                     var ReturnLng = geoInfo.lng;
