@@ -157,7 +157,7 @@ namespace WeatherChecker.Services
                         if (openWeatherResponse != null)
                         {
 
-                            Console.WriteLine($"Response weather: {openWeatherResponse}");
+                            // Console.WriteLine($"Response weather: {openWeatherResponse}");
 
                             return new WeatherResultDto
                             {
