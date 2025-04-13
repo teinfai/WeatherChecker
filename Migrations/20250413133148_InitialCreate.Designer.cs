@@ -12,7 +12,7 @@ using WeatherChecker.DbContext;
 namespace WeatherChecker.Migrations
 {
     [DbContext(typeof(WeatherDbContext))]
-    [Migration("20250412092800_InitialCreate")]
+    [Migration("20250413133148_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -32,6 +32,15 @@ namespace WeatherChecker.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CountryCode")
                         .HasColumnType("longtext");

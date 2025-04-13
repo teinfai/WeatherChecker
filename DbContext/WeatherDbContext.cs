@@ -10,6 +10,6 @@ namespace WeatherChecker.DbContext
         {
         }
 
-        public DbSet<Location> Locations { get; set; } = null!;
+        public DbSet<Location> Locations { get; set; }
     }
 }
