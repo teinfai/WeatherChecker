@@ -164,8 +164,8 @@ namespace WeatherChecker.Controllers
         //     }
         // }
 
-        [HttpPost]
-        public async Task<IActionResult> SearchWeatherWithAddress([FromBody] SearchDto dto)
+        [HttpGet]
+        public async Task<IActionResult> SearchWeatherWithAddress([FromQuery] SearchDto dto)
         {
             try
             {
