@@ -66,6 +66,18 @@ namespace WeatherChecker.Services
 
         }
 
+
+        public async Task<List<UserDto>> GetAllUsers()
+        {
+            var users = await _repo.GetAllUsers();
+            return users.Select(ToDto).ToList();
+        }
+
+        public async Task<bool> DeleteUser(int id)
+        {
+            return await _repo.DeleteUser(id);
+        }
+
         private UserDto ToDto(User user)
         {
             return new UserDto
