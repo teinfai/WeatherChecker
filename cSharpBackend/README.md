@@ -51,35 +51,46 @@ dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer -v 8.0.0
 
 ### 3. Project structure:
 ```
+- Controllers/
+    - AuthController.cs
+    - UserController.cs
+    - WeathertrackerController.cs
 - DbContext/
     - WeatherDbContext.cs
-- Models/
-    - Location.cs
-    - User.cs
 - Dtos/
     - CreateLocationDto.cs
-    - UpdateLocationDto.cs
     - LocationDto.cs
+    - LoginUserDto.cs
+    - RegisterUserDto.cs
+    - SearchDto.cs
+    - TokenDto.cs
+    - UpdateLocationDto.cs
+    - UserDto.cs
+    - WeatherInfoDto.cs
     - WeatherResultDto.cs
-    - LoginDto.cs
-- Repositories/
-    - ILocationRepository.cs
-    - LocationRepository.cs
-    - IUserRepository.cs
-- Services/
-    - ILocationService.cs
-    - LocationService.cs
-    - IAuthService.cs
-    - AuthService.cs
-- Controllers/
-    - LocationController.cs
-    - AuthController.cs
-- Security/
-    - JwtTokenService.cs
+- Migrations/
+- Models/
+    - Entity.cs
+    - GeoResponse.cs
+    - Location.cs
+    - OpenWeatherResponse.cs
+    - User.cs
 - Modules/
     - JwtTokenGenerator.cs
     - OpenCageDataMap.cs
     - OpenWeatherMap.cs
+- Repositories/
+    - ILocationRepository.cs
+    - LocationRepository.cs
+    - IUserRepository.cs
+    - UserRepository.cs
+- Services/
+    - ILocationService.cs
+    - LocationService.cs
+    - IUserService.cs
+    - UserService.cs
+- Utils/
+    - PasswordHelper.cs
 ```
 
 ### 4. Configure `appsettings.json`:
@@ -95,24 +106,6 @@ dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer -v 8.0.0
 ```
 
 ### 5. Register WeatherDbContext and JWT in `Program.cs`
-```csharp
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
-    {
-        var config = builder.Configuration.GetSection("JwtSettings");
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = config["Issuer"],
-            ValidAudience = config["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(config["SecretKey"]))
-        };
-    });
-```
 
 ### 6. Apply database migration:
 ```bash

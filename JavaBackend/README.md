@@ -19,8 +19,8 @@ A backend-only weather tracking API built with **Spring Boot**, **MySQL**, and t
 
 ## 💻 Environment Setup
 
-1. **Install Java 17**  
-   👉 [Download Java](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+1. **Install Java 8**  
+   👉 [Download Java](https://www.oracle.com/java/technologies/javase/jdk8-archive-downloads.html)
 
 2. **Install MySQL Workbench**  
    👉 [Download MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
@@ -81,7 +81,7 @@ Use [Spring Initializr](https://start.spring.io/) with these dependencies:
 
 ### 3. Configure `application.properties`
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/weather_checker_db
+spring.datasource.url=jdbc:mysql://localhost:3306/demo_db
 spring.datasource.username=root
 spring.datasource.password=your_password
 
