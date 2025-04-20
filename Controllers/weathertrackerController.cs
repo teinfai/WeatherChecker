@@ -11,13 +11,13 @@ namespace WeatherChecker.Controllers
     [Route("api/[controller]/[action]")]
 
     // Controller class that handles location-related API actions
-    public class LocationsController : ControllerBase
+    public class weathertrackerController : ControllerBase
     {
         // Declare a private variable for the location service
         private readonly ILocationService _locationService;
 
         // Constructor: receives ILocationService via dependency injection
-        public LocationsController(ILocationService locationService)
+        public weathertrackerController(ILocationService locationService)
         {
             _locationService = locationService;
         }
@@ -164,8 +164,8 @@ namespace WeatherChecker.Controllers
         //     }
         // }
 
-        [HttpGet]
-        public async Task<IActionResult> SearchWeatherWithAddress([FromQuery] SearchDto dto)
+        [HttpPost]
+        public async Task<IActionResult> info([FromBody] SearchDto dto)
         {
             try
             {

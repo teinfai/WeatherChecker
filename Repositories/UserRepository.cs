@@ -20,5 +20,11 @@ namespace WeatherChecker.Repositories
             return userModel;
         }
 
+        public async Task<User?> GetByName(string name)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Name == name);
+
+        }
+
     }
 }

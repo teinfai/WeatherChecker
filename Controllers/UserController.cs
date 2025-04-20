@@ -40,9 +40,12 @@ namespace WeatherChecker.Controllers
             }
         }
 
-        // [HttpPost("login")]
-        // public async Task<IActionResult> Login([FromBody] LoginUserDto Request)
+        // [HttpPost]
+        // public async Task<IActionResult> login([FromBody] LoginUserDto Request)
         // {
+
+        //     if (string.IsNullOrWhiteSpace(Request.Name) || string.IsNullOrWhiteSpace(Request.Password))
+        //         throw new Exception("Name and password are required.");
         //     try
         //     {
         //         var result = await _userService.LoginUser(Request);

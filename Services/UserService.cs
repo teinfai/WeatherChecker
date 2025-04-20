@@ -5,22 +5,27 @@ using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 using WeatherChecker.Helpers;
+using WeatherChecker.Modules;
 
 namespace WeatherChecker.Services
 {
     public class UserService : IUserService
 
     {
-
-
         private readonly IUserRepository _repo;
         private readonly HttpClient _httpClient;
 
+        private readonly JwtTokenGenerator _jwtTokenGenerator;
 
-        public UserService(IUserRepository repo)
+        public UserService(
+            IUserRepository repo,
+            JwtTokenGenerator jwtTokenGenerator
+            )
         {
             _repo = repo;
             _httpClient = new HttpClient();
+            _jwtTokenGenerator = jwtTokenGenerator;
+
         }
 
         public async Task<UserDto> RegisterUser(UserDto Request)
@@ -37,6 +42,28 @@ namespace WeatherChecker.Services
             // return ToDto(saved);
 
             return ToDto(saved);
+        }
+
+        public async Task<TokenDto> LoginUser(LoginUserDto Request)
+        {
+            var findUser = await _repo.GetByName(Request.Name);
+
+            if (findUser == null)
+                throw new Exception("Invalid username or password.");
+
+            var userHashedPassword = PasswordHelper.HashPassword(Request.Password);
+
+            if (findUser.Password != userHashedPassword)
+                throw new Exception("Invalid username or password.");
+
+            var token = _jwtTokenGenerator.GenerateToken(findUser.Id, findUser.Name);
+
+            return new TokenDto
+            {
+                Token = token,
+                Name = findUser.Name,
+            };
+
         }
 
         private UserDto ToDto(User user)

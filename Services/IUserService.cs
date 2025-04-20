@@ -6,6 +6,7 @@ namespace WeatherChecker.Services
     {
       
         Task<UserDto> RegisterUser(UserDto request);
+        Task<TokenDto> LoginUser(LoginUserDto Request);
 
     }
 }
