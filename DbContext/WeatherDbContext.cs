@@ -13,3 +13,5 @@ namespace WeatherChecker.DbContext
         public DbSet<Location> Locations { get; set; }
     }
 }
+
+

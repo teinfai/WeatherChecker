@@ -3,12 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WeatherChecker.Models
 {
-    public abstract class Entity<TKey>
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public virtual TKey Id { get; set; }
-    }
     public class Location : Entity<int>
     {
         public string Name { get; set; }          // e.g., "Ipoh"
@@ -27,4 +21,6 @@ namespace WeatherChecker.Models
         public string City {get;set;}
         public string Country {get;set;}
     }
+
+    
 }
