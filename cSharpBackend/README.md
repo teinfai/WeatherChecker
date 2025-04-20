@@ -45,7 +45,7 @@ Resource: https://learn.microsoft.com/en-us/ef/core/cli/dotnet
    - Dtos/CreateLocationDto.cs, UpdateLocationDto.cs, LocationDto.cs, WeatherResultDto.cs
 
 4. Configure MySQL in appsettings.json:
-5. Register WeatherDbContext
+5. Register UserDBContext
 6. Apply database migration:
 dotnet ef migrations add InitialCreate  
 dotnet ef database update
