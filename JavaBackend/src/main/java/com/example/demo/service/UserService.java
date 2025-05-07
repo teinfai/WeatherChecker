@@ -1,12 +1,15 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.User;
+import com.example.demo.entity.UserDetail;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +26,22 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Transactional
+    public List<User> getAllUsersWithDetail(Long id) {
+        List<Long> ids = new ArrayList<>();
+        ids.add(id);
+        List<User> users = userRepository.findAllById(ids);
+
+        for (User user : users) {
+            UserDetail detail = user.getUserDetail(); // triggers lazy loading
+            if (detail != null) {
+                detail.getHobby(); // force initialize lazy data
+            }
+        }
+
+        return users;
     }
 
     public User getUserById(Long id) {

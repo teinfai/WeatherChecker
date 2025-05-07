@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -22,6 +24,15 @@ public class User {
     // ✅ New password field
     @Column(nullable = false)
     private String password;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private UserDetail userDetail;
+
+
+    public UserDetail getUserDetail() {
+        return userDetail;
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

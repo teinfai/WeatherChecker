@@ -30,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         "/auth/login",
+                        "/api/users/retrieveUserDetail/**",
                         "/api/users/register", // ✅ allow registration without JWT
                         "/swagger-ui/**",
                         "/swagger-ui.html",

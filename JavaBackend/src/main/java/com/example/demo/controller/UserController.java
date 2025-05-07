@@ -24,6 +24,12 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("retrieveUserDetail/{id}")
+    @ApiOperation(value = "Get users with detail")
+    public List<User> retrieveUserWithDetail(@PathVariable Long id) {
+        return userService.getAllUsersWithDetail(id);
+    }
+
     @GetMapping("retrieveSingleUser/{id}")
     @ApiOperation(value = "Get user by ID")
     public User getUserById(@PathVariable Long id) {
