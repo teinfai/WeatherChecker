@@ -23,6 +23,9 @@ spring:
     listener:
       simple:
         message-converter: jackson2JsonMessageConverter
+  redis:
+    host: localhost
+    port: 6381
 
 springfox:
   documentation:

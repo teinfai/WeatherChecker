@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
+import com.example.demo.service.AuthLoginQueueStatusService;
 import com.example.demo.service.MessageSender;
 import com.example.demo.service.UserService;
 import io.swagger.annotations.Api;
@@ -24,7 +25,6 @@ public class UserController {
 
     @Autowired
     private DynamicQueueService dynamicQueueService;
-
 
 
     @GetMapping("retrieveAllUser")

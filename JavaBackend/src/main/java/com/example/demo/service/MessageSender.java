@@ -15,10 +15,14 @@ public class MessageSender {
     private DynamicQueueService dynamicQueueService;
 
     public void send(User user) {
-        // Make sure queue exists (creates if not)
         String QUEUE_NAME = "registerUserQueue";
         dynamicQueueService.createQueueIfNotExists(QUEUE_NAME);
-        // Send user as message
         rabbitTemplate.convertAndSend(QUEUE_NAME, user);
     }
+
+
+    public void sendLoginSessionToQueue(String queueName, String sessionId) {
+        rabbitTemplate.convertAndSend(queueName, sessionId);
+    }
+
 }
