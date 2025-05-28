@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dao.AuthServiceDao;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.TokenResponseDTO;
 import com.example.demo.entity.User;
@@ -13,23 +14,9 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private AuthServiceDao authServiceDao;
 
     public TokenResponseDTO login(LoginRequestDTO request) {
-        User user = userRepository.findByName(request.getName())
-                .orElseThrow(() -> new RuntimeException("User not found: " + request.getName()));
-
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid password for user: " + request.getName());
-        }
-
-        String token = jwtUtil.generateToken(user.getName());
-        return new TokenResponseDTO(token);
+        return authServiceDao.login(request);
     }
 }
