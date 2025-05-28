@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
+import com.example.demo.service.MessageSender;
 import com.example.demo.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,10 +18,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MessageSender messageSender;
+
 
     @GetMapping("retrieveAllUser")
     @ApiOperation(value = "Get all users")
     public List<User> getAllUsers() {
+
         return userService.getAllUsers();
     }
 
@@ -28,6 +33,13 @@ public class UserController {
     @ApiOperation(value = "Get users with detail")
     public List<User> retrieveUserWithDetail(@PathVariable Long id) {
         return userService.getAllUsersWithDetail(id);
+    }
+
+    @PostMapping("/sendToQueue")
+    @ApiOperation(value = "Test sending user to RabbitMQ + service")
+    public String sendToQueue(@RequestBody User user) {
+        messageSender.send(user);
+        return "✅ Sent to queue";
     }
 
     @GetMapping("retrieveSingleUser/{id}")

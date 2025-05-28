@@ -1,0 +1,45 @@
+server:
+  port: 5000
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo_db?useSSL=false&serverTimezone=UTC
+    username: root
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        message-converter: jackson2JsonMessageConverter
+
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /v2/api-docs
+
+openweather:
+  api:
+    key: 241a9e3d145df6e0810b7ecf94364d70
+    url: https://api.openweathermap.org/data/2.5/weather
+
+opencega:
+  api:
+    key: f501eab26cb44648a51b46c18e97c938
+    url: https://api.opencagedata.com
+
+jwt:
+  secret: 9BC1AE8F7E1347B8ADFE2F1F8A63C4B3
+

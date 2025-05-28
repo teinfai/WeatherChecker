@@ -48,7 +48,13 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    @Transactional
     public User createUser(User user) {
+
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            System.out.println("❌ Email already exists: " + user.getEmail());
+            return null;
+        }
 
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);

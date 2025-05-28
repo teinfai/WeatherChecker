@@ -21,6 +21,9 @@ function LoginForm() {
         e.preventDefault();
         try {
             // 1. Login request
+            console.log(formData);
+
+
             const res = await axios.post('http://localhost:5000/auth/login', formData);
             const token = res.data.token;
             // console.log(token);
