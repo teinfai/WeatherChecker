@@ -13,9 +13,8 @@ public class MessageListener {
     @Autowired
     private UserService userService;    // now guaranteed non-null
 
-    @RabbitListener(queues = RabbitMQConfig.EMAIL_QUEUE)
-    public void receive(User user) {
-        System.out.println("📥 Listener received: " + user.getName());
+    @RabbitListener(queues = "registerUserQueue")
+    public void handleUserRegistration(User user) {
         userService.createUser(user);   // will now work without NPE
     }
 }

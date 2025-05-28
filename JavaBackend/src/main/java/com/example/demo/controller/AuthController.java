@@ -1,4 +1,6 @@
 package com.example.demo.controller;
+import com.example.demo.service.DynamicQueueService;
+
 
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.TokenResponseDTO;
@@ -13,6 +15,10 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private DynamicQueueService dynamicQueueService;
+
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDTO> login(@RequestBody LoginRequestDTO request) {

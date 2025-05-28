@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.service.DynamicQueueService;
 
 import java.util.List;
 
@@ -21,11 +22,14 @@ public class UserController {
     @Autowired
     private MessageSender messageSender;
 
+    @Autowired
+    private DynamicQueueService dynamicQueueService;
+
+
 
     @GetMapping("retrieveAllUser")
     @ApiOperation(value = "Get all users")
     public List<User> getAllUsers() {
-
         return userService.getAllUsers();
     }
 

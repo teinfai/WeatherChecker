@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.config.RabbitMQConfig;
 import com.example.demo.entity.User;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,14 @@ public class MessageSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private DynamicQueueService dynamicQueueService;
+
     public void send(User user) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EMAIL_QUEUE, user);
+        // Make sure queue exists (creates if not)
+        String QUEUE_NAME = "registerUserQueue";
+        dynamicQueueService.createQueueIfNotExists(QUEUE_NAME);
+        // Send user as message
+        rabbitTemplate.convertAndSend(QUEUE_NAME, user);
     }
 }
