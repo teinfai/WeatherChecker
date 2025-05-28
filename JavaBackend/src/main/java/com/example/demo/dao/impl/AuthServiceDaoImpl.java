@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-@Repository // <---- IMPORTANT!
+@Repository 
 public class AuthServiceDaoImpl implements AuthServiceDao {
 
     @Autowired
