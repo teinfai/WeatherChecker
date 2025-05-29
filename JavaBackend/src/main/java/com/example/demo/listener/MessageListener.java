@@ -27,7 +27,7 @@ public class MessageListener {
         // TODO: (Optional) Fetch login request details from Redis (if you store them)
         // Simulate login processing
         System.out.println("Processing login for: " + sessionId);
-        try { Thread.sleep(2000); } catch (Exception ignored) {}
+        try { Thread.sleep(30000); } catch (Exception ignored) {}
         // After processing, mark status as ready
         authLoginQueueStatusService.markReady(sessionId);
     }
